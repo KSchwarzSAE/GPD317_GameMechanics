@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+*.sdf
+Build/bin
+*.vcxproj.user
+Framework/Debug
+Framework/x64
