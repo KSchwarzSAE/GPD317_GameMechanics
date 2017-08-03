@@ -26,6 +26,7 @@
     <ClCompile Include="TestScene.cpp">
       <Filter>TestScene</Filter>
     </ClCompile>
+    <ClCompile Include="common.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">

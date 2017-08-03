@@ -1,14 +1,16 @@
 #include "Scene.h"
 
-Scene::Scene()
+Scene::Scene(System* _pSystem)
+	: m_pSystem(_pSystem)
 {
+
 }
 
 Scene::~Scene()
 {
 }
 
-void Scene::render()
+void Scene::render(SDL_Surface* _pSurface)
 {
 }
 

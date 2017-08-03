@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 	if (s.init() && s.load())
 	{
 		// testszene laden
-		TestScene scene = TestScene();
+		TestScene scene = TestScene(&s);
 		s.changeScene(&scene);
 
 		// programm ausfuehren

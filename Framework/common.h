@@ -9,3 +9,8 @@
 #undef main
 
 #endif
+
+#include <string>
+
+std::string getParentDirectory(std::string _path, int _depth = 1);
+std::string getAssetPath(const char* _path);
