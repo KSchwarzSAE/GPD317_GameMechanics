@@ -14,6 +14,9 @@
     <Filter Include="TestScene">
       <UniqueIdentifier>{ddf23f22-9bf8-4a41-ab0c-47b8af3c20d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entity">
+      <UniqueIdentifier>{5c37bdfd-33e6-4042-9474-0f3bc6fb90af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -27,6 +30,9 @@
       <Filter>TestScene</Filter>
     </ClCompile>
     <ClCompile Include="common.cpp" />
+    <ClCompile Include="Entity.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -39,5 +45,11 @@
       <Filter>TestScene</Filter>
     </ClInclude>
     <ClInclude Include="common.h" />
+    <ClInclude Include="Entity.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityFlags.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

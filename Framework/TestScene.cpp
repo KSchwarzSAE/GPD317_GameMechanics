@@ -1,52 +1,57 @@
 #include "TestScene.h"
 #include "System.h"
+#include "Entity.h"
 
 TestScene::TestScene(System* _pSystem)
 	: Scene(_pSystem)
 {
-	m_pLinkPos = new SDL_Rect();
-	m_pLinkPos->x = 0;
-	m_pLinkPos->y = 0;
-	m_pLinkPos->w = 30;
-	m_pLinkPos->h = 60;
 }
 
 TestScene::~TestScene()
 {
-	delete m_pLinkPos;
+
 }
 
 void TestScene::update()
 {
-	m_pLinkPos->y++;
-
-	if (m_pSystem->WasKeyPressed(Key::W))
+	if (m_pSystem->IsKeyPressed(Key::W))
 	{
-		m_pLinkPos->y -= 150;
+		m_offset.y -= 1;
 	}
 
 	if (m_pSystem->IsKeyPressed(Key::A))
 	{
-		m_pLinkPos->x -= 1;
+		m_offset.x -= 1;
+	}
+
+	if (m_pSystem->IsKeyPressed(Key::S))
+	{
+		m_offset.y += 1;
 	}
 
 	if (m_pSystem->IsKeyPressed(Key::D))
 	{
-		m_pLinkPos->x += 1;
+		m_offset.x += 1;
 	}
 
-	if (m_pLinkPos->y >= 540)
-		m_pLinkPos->y = 540;
 }
 
 void TestScene::render(SDL_Surface* _pSurface)
 {
-	SDL_BlitScaled(m_pLink, 0, _pSurface, m_pLinkPos);
+	Scene::render(_pSurface);
 }
 
 void TestScene::load(Uint32 _rmask, Uint32 _gmask, Uint32 _bmask, Uint32 _amask)
 {
 	LOAD_OPTIMIZED_IMAGE("Images/link.png", m_pLink);
+
+	SDL_Rect boundsLink;
+	boundsLink.x = 0;
+	boundsLink.y = 0;
+	boundsLink.w = 30;
+	boundsLink.h = 60;
+
+	AddEntity(new Entity("Link", m_pLink, boundsLink));
 }
 
 void TestScene::unload()

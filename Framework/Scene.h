@@ -1,7 +1,9 @@
 #pragma once
 
 #include "common.h"
+#include <list>
 
+#pragma region optimization
 #define LOAD_OPTIMIZED_IMAGE(PATH, VAR)								\
 /* das bild	laden */												\
 SDL_Surface* VAR##Image = IMG_Load(getAssetPath(PATH).c_str());		\
@@ -11,7 +13,7 @@ VAR = SDL_CreateRGBSurface(											\
 	0,																\
 	VAR##Image->w,													\
 	VAR##Image->h,													\
-	16,																\
+	32,																\
 	_rmask,															\
 	_gmask,															\
 	_bmask,															\
@@ -25,7 +27,12 @@ SDL_BlitSurface(VAR##Image, 0, VAR, 0);								\
 VAR = VAR##Image;
 // SDL_FreeSurface(VAR##Image);										\
 
+#pragma endregion
+
 class System;
+class Entity;
+
+typedef std::list<Entity*> EntityList;
 
 class Scene
 {
@@ -36,11 +43,20 @@ public:
 
 	virtual void render(SDL_Surface* _pSurface);
 	virtual void update();
+	virtual void CheckCollisions();
 
 	virtual void load(Uint32 _rmask, Uint32 _gmask, Uint32 _bmask, Uint32 _amask);
 	virtual void unload();
 
+	void AddEntity(Entity* _pEntity);
+	void RemoveEntity(Entity* _pEntity);
+
 protected:
+	EntityList m_entitiesToRender;
+	EntityList m_entitiesToUpdate;
+	EntityList m_entitiesToCollide;
+
+	SDL_Point m_offset;
 	System* m_pSystem;
 
 };

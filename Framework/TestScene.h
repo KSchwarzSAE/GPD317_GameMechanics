@@ -17,6 +17,5 @@ public:
 
 private:
 	SDL_Surface* m_pLink;
-	SDL_Rect* m_pLinkPos;
 
 };
