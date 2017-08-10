@@ -17,6 +17,15 @@
     <Filter Include="Entity">
       <UniqueIdentifier>{5c37bdfd-33e6-4042-9474-0f3bc6fb90af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Timer">
+      <UniqueIdentifier>{eed8ceef-be34-4808-992a-0ac761bf5680}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{f03951a2-3d3d-4c07-81b4-0e190227ed67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Font">
+      <UniqueIdentifier>{704deaab-88ca-4875-a230-468c98e9ba92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -33,6 +42,16 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Font</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugOverlay.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -51,5 +70,15 @@
     <ClInclude Include="EntityFlags.h">
       <Filter>Entity</Filter>
     </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Font</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugOverlay.h" />
   </ItemGroup>
 </Project>

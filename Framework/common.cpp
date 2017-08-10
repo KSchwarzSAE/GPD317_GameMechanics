@@ -1,4 +1,5 @@
 #include "common.h"
+#include <time.h>
 
 std::string getParentDirectory(std::string _path, int _depth)
 {
@@ -16,4 +17,20 @@ std::string getAssetPath(const char* _path)
 	std::string path = getParentDirectory(SDL_GetBasePath(), 3);
 	path.append("/Assets/").append(_path);
 	return path;
+}
+
+static bool randomInited = false;
+
+int RandomI(int _min, int _max)
+{
+	if (!randomInited) { srand(time(NULL)); randomInited = true; }
+
+	return _min + (int)(((float)rand() / RAND_MAX) * (_max - _min));
+}
+
+float RandomF(float _min, float _max)
+{
+	if (!randomInited) { srand(time(NULL)); randomInited = true; }
+
+	return _min + ((float)rand() / RAND_MAX) * (_max - _min);
 }

@@ -42,7 +42,7 @@ public:
 	virtual ~Scene();
 
 	virtual void render(SDL_Surface* _pSurface);
-	virtual void update();
+	virtual void update(Uint32 _dt);
 	virtual void CheckCollisions();
 
 	virtual void load(Uint32 _rmask, Uint32 _gmask, Uint32 _bmask, Uint32 _amask);

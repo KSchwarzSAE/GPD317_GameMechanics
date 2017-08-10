@@ -1,20 +1,19 @@
 #include "System.h"
 #include "Scene.h"
+#include "Timer.h"
+#include "Font.h"
+#include "DebugOverlay.h"
 #include "common.h"
 
 #include <iostream>
-
-#define HANDLE_ERROR(CHECK)							\
-if(CHECK)											\
-{													\
-	std::cout << SDL_GetError() << std::endl;		\
-	return false;									\
-}													\
 
 System::System()
 {
 	m_pWindow = nullptr;
 	m_pWindowSurface = nullptr;
+	m_pDebug = nullptr;
+	m_desiredTPS = 30;
+	m_desiredFPS = 60;
 }
 
 bool System::init()
@@ -24,6 +23,9 @@ bool System::init()
 	
 	// Image Plugin Initialisieren, und wenn der Rueckgabewert kleiner 0 ist, ist ein Fehler aufgetreten
 	HANDLE_ERROR(IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG) < 0);
+
+	// Fonts initialisieren, und wenn der Rueckgabewert kleiner 0 ist, ist ein Fehler aufgetreten
+	HANDLE_ERROR(TTF_Init() < 0);
 
 	m_pWindow = SDL_CreateWindow(
 		"Hello SDL World!",		// Titel des Fensters
@@ -41,6 +43,8 @@ bool System::init()
 
 	HANDLE_ERROR(m_pWindowSurface == nullptr);
 
+	m_pDebug = new DebugOverlay(this, new Font(getAssetPath("Fonts/comic.ttf").c_str(), 12));
+
 	// fertig initialisiert
 	return true;
 }
@@ -52,12 +56,45 @@ bool System::load()
 
 void System::run()
 {
+	Timer tickCountTimer;
+	Uint32 ticks = 0;
+	Uint32 frames = 0;
+
+	Timer tickTimer;
+	Timer renderTimer;
+
+	tickTimer.Start();
+	renderTimer.Start();
+	tickCountTimer.Start();
+
 	// solange nicht gestoppt werden soll, wird die schleife laufen
 	while (!m_shouldStop && m_pScene)
 	{
-		input();
-		update();
-		render();
+		Uint32 dt = tickTimer.TicksTicked();
+		if (dt >= (1000 / m_desiredTPS))
+		{
+			tickTimer.Restart();
+			input();
+			update(dt);
+			ticks++;			
+		}
+		
+		Uint32 df = renderTimer.TicksTicked();
+		if (df >= (1000 / m_desiredFPS))
+		{
+			renderTimer.Restart();
+			render();
+			frames++;
+		}
+
+		if (tickCountTimer.TicksTicked() > 1000)
+		{
+			m_fps = frames;
+			m_tps = ticks;
+			ticks = 0;
+			frames = 0;
+			tickCountTimer.Restart();
+		}
 	}
 }
 
@@ -115,13 +152,16 @@ void System::render()
 	// die scene rendern
 	m_pScene->render(m_pWindowSurface);
 
+	// das debug overlay anzeigen
+	m_pDebug->Render(m_pWindowSurface);
+
 	// geaenderte fenster oberflaeche an die graka schicken zur anzeige
 	SDL_UpdateWindowSurface(m_pWindow);
 }
 
-void System::update()
+void System::update(Uint32 _dt)
 {
-	m_pScene->update();
+	m_pScene->update(_dt);
 }
 
 void System::input()
@@ -185,4 +225,28 @@ void System::input()
 				break;
 		}
 	}
+}
+
+std::string System::GetFPS(bool _addDesired)
+{
+	std::string s = std::to_string(m_fps);
+
+	if (_addDesired)
+	{
+		s.append(" / ").append(std::to_string(m_desiredFPS));
+	}
+
+	return s;
+}
+
+std::string System::GetTPS(bool _addDesired)
+{
+	std::string s = std::to_string(m_tps);
+
+	if (_addDesired)
+	{
+		s.append(" / ").append(std::to_string(m_desiredTPS));
+	}
+
+	return s;
 }

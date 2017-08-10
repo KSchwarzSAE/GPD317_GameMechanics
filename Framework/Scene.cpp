@@ -21,13 +21,13 @@ void Scene::render(SDL_Surface* _pSurface)
 	}
 }
 
-void Scene::update()
+void Scene::update(Uint32 _dt)
 {
 	for (auto itr = m_entitiesToUpdate.begin();
 			itr != m_entitiesToUpdate.end();
 			++itr)
 	{
-		(*itr)->Update();
+		(*itr)->Update(_dt);
 	}
 
 	CheckCollisions();
