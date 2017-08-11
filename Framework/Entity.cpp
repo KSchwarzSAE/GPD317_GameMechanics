@@ -1,30 +1,27 @@
 #include "Entity.h"
+#include "Renderer.h"
 
 Entity::Entity(
 	const char* _name,
-	SDL_Surface* _pSprite,
+	Texture* _pSprite,
 	SDL_Rect _bounds,
 	EntityFlags _flags)
-	: m_name(_name), m_pSprite(_pSprite), m_bounds(_bounds), m_flags(_flags)
+	: m_name(_name), m_pSprite(_pSprite), m_bounds(_bounds), m_flags(_flags), Object()
 {
-	m_pSprite->refcount++;
+	
 }
 
 Entity::~Entity()
 {
-	if (m_pSprite->refcount--)
-	{
-		delete m_pSprite;
-	}	
 }
 
-void Entity::Render(SDL_Surface* _pTarget, SDL_Point _offset)
+void Entity::Render(Renderer* _pRenderer, SDL_Point _offset)
 {
 	SDL_Rect bounds = SDL_Rect(m_bounds);
 	bounds.x -= _offset.x;
 	bounds.y -= _offset.y;
 
-	SDL_BlitScaled(m_pSprite, 0, _pTarget, &bounds);
+	_pRenderer->DrawTexture(m_pSprite, bounds);
 }
 
 void Entity::SetFlag(EntityFlags _flag, bool _state)

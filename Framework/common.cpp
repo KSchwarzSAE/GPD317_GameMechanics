@@ -1,5 +1,8 @@
 #include "common.h"
 #include <time.h>
+#include <iostream>
+
+static int gTexCount = 0;
 
 std::string getParentDirectory(std::string _path, int _depth)
 {
@@ -33,4 +36,14 @@ float RandomF(float _min, float _max)
 	if (!randomInited) { srand(time(NULL)); randomInited = true; }
 
 	return _min + ((float)rand() / RAND_MAX) * (_max - _min);
+}
+
+void Log(const char* _string)
+{
+	std::cout << _string << std::endl;
+}
+
+void Log(std::string _string)
+{
+	Log(_string.c_str());
 }

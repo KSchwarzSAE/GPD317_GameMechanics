@@ -1,6 +1,7 @@
 #include "common.h"
 #include "System.h"
 #include "TestScene.h"
+#include "Texture.h"
 
 int main(int argc, char *argv[])
 {

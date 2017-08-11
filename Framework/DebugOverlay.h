@@ -2,7 +2,7 @@
 
 class Font;
 class System;
-struct SDL_Surface;
+class Renderer;
 
 class DebugOverlay
 {
@@ -10,7 +10,7 @@ public:
 	DebugOverlay(System* _pSystem, Font* _pFont);
 	~DebugOverlay();
 
-	void Render(SDL_Surface* _pTarget);
+	void Render(Renderer* _pRenderer);
 
 private:
 	System* m_pSystem;

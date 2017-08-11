@@ -26,6 +26,18 @@
     <Filter Include="Font">
       <UniqueIdentifier>{704deaab-88ca-4875-a230-468c98e9ba92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DebugOverlay">
+      <UniqueIdentifier>{ffca4d2d-6eec-479b-8104-791aad0dd9c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{455009c4-175b-49f3-8faa-ec79fe356d4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture">
+      <UniqueIdentifier>{f39a4bfb-dde9-4dd6-9c66-b00cc8aefa75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{75fc7907-bfd9-43a2-b748-e400fb898450}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -51,7 +63,18 @@
     <ClCompile Include="Player.cpp">
       <Filter>Player</Filter>
     </ClCompile>
-    <ClCompile Include="DebugOverlay.cpp" />
+    <ClCompile Include="DebugOverlay.cpp">
+      <Filter>DebugOverlay</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -79,6 +102,17 @@
     <ClInclude Include="Player.h">
       <Filter>Player</Filter>
     </ClInclude>
-    <ClInclude Include="DebugOverlay.h" />
+    <ClInclude Include="DebugOverlay.h">
+      <Filter>DebugOverlay</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Object</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

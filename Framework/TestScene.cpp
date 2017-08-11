@@ -3,6 +3,8 @@
 #include "Entity.h"
 #include "Player.h"
 #include "Font.h"
+#include "Texture.h"
+#include "Renderer.h"
 
 TestScene::TestScene(System* _pSystem)
 	: Scene(_pSystem)
@@ -39,19 +41,37 @@ void TestScene::update(Uint32 _dt)
 	Scene::update(_dt);
 }
 
-void TestScene::render(SDL_Surface* _pSurface)
+void TestScene::render(Renderer* _pRenderer)
 {
-	Scene::render(_pSurface);
+	Scene::render(_pRenderer);
 
-	m_pFont->Render("Hello World", _pSurface, SDL_Point());
+	SDL_Rect rect;
+	rect.x = 5;
+	rect.y = 15;
+	rect.w = m_pHello->GetWidth();
+	rect.h = m_pHello->GetHeight();
+	_pRenderer->DrawTexture(m_pHello, rect);
 }
 
-void TestScene::load(Uint32 _rmask, Uint32 _gmask, Uint32 _bmask, Uint32 _amask)
+void TestScene::load(Renderer* _pRenderer)
 {
-	m_pFont = new Font(getAssetPath("Fonts/comic.ttf").c_str(), 12);
+	Texture* pEgg = new Texture(_pRenderer, getAssetPath("Images/egg.png").c_str());
 
-	SDL_Surface* pLink;
-	LOAD_OPTIMIZED_IMAGE("Images/link.png", pLink);
+	for (int i = 0; i < 100; ++i)
+	{
+		SDL_Rect boundsEgg;
+		boundsEgg.w = 172;
+		boundsEgg.h = 240;
+		boundsEgg.x = RandomI(0, 628);
+		boundsEgg.y = RandomI(0, 360);
+
+		AddEntity(new Entity("Egg", pEgg, boundsEgg));
+	}
+
+	m_pFont = new Font(getAssetPath("Fonts/comic.ttf").c_str(), 12);
+	m_pHello = m_pFont->Create("Hello World", _pRenderer);
+
+	Texture* pLink = new Texture(_pRenderer, getAssetPath("Images/link.png").c_str());
 
 	SDL_Rect boundsLink;
 	boundsLink.x = 0;
@@ -69,9 +89,6 @@ void TestScene::load(Uint32 _rmask, Uint32 _gmask, Uint32 _bmask, Uint32 _amask)
 
 void TestScene::unload()
 {
-	if (m_pFont)
-	{
-		delete m_pFont;
-		m_pFont = nullptr;
-	}
+	SAFE_DELETE(m_pHello);
+	SAFE_DELETE(m_pFont);
 }

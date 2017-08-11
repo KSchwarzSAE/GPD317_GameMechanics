@@ -2,20 +2,24 @@
 
 #include "common.h"
 #include "EntityFlags.h"
+#include "Object.h"
 
-class Entity
+class Renderer;
+class Texture;
+
+class Entity : public Object
 {
 
 public:
 	Entity(
 		const char* _name, 
-		SDL_Surface* _pSprite, 
+		Texture* _pSprite,
 		SDL_Rect _bounds, 
 		EntityFlags _flags = EntityFlags::NONE);
 	virtual ~Entity();
 
 	// Zeichnet die Entity auf Target
-	virtual void Render(SDL_Surface* _pTarget, SDL_Point _offset);
+	virtual void Render(Renderer* _pRenderer, SDL_Point _offset);
 
 	virtual void Update(Uint32 _dt) {}
 	virtual void OnCollision(Entity* _other) {}
@@ -29,6 +33,7 @@ public:
 private:
 	const char* m_name;
 	EntityFlags m_flags;
-	SDL_Surface* m_pSprite;
+	Texture* m_pSprite;
 	SDL_Rect m_bounds;
+
 };

@@ -3,6 +3,7 @@
 #include "Timer.h"
 #include "Font.h"
 #include "DebugOverlay.h"
+#include "Renderer.h"
 #include "common.h"
 
 #include <iostream>
@@ -10,7 +11,7 @@
 System::System()
 {
 	m_pWindow = nullptr;
-	m_pWindowSurface = nullptr;
+	m_pRenderer = nullptr;
 	m_pDebug = nullptr;
 	m_desiredTPS = 30;
 	m_desiredFPS = 60;
@@ -38,10 +39,9 @@ bool System::init()
 
 	HANDLE_ERROR(m_pWindow == nullptr);
 
-	// Zeichenflaeche des Fensters holen
-	m_pWindowSurface = SDL_GetWindowSurface(m_pWindow);
-
-	HANDLE_ERROR(m_pWindowSurface == nullptr);
+	// den renderer initialisieren
+	m_pRenderer = new Renderer(m_pWindow);
+	HANDLE_ERROR(!m_pRenderer->Valid());
 
 	m_pDebug = new DebugOverlay(this, new Font(getAssetPath("Fonts/comic.ttf").c_str(), 12));
 
@@ -100,6 +100,12 @@ void System::run()
 
 void System::clean()
 {
+	if (m_pRenderer)
+	{
+		delete m_pRenderer;
+		m_pRenderer = nullptr;
+	}
+
 	if (m_pWindow)
 	{
 		SDL_DestroyWindow(m_pWindow);
@@ -116,12 +122,7 @@ void System::changeScene(Scene* _pNewScene)
 	m_pScene = _pNewScene;
 	if (m_pScene)
 	{
-		m_pScene->load(
-			m_pWindowSurface->format->Rmask,
-			m_pWindowSurface->format->Bmask,
-			m_pWindowSurface->format->Gmask,
-			m_pWindowSurface->format->Amask
-			);
+		m_pScene->load(m_pRenderer);
 	}
 }
 
@@ -142,27 +143,42 @@ bool System::WasKeyReleased(Key _key) const
 
 void System::render()
 {
-	// das bild mit blau clearen
-	SDL_FillRect(
-		m_pWindowSurface,
-		0,
-		SDL_MapRGB(m_pWindowSurface->format, 0, 0, 255)
-		);
+	// das bild clearen
+	m_pRenderer->BeginFrame();
 
 	// die scene rendern
-	m_pScene->render(m_pWindowSurface);
+	m_pScene->render(m_pRenderer);
 
-	// das debug overlay anzeigen
-	m_pDebug->Render(m_pWindowSurface);
+	if (m_debugEnabled)
+	{
+		// das debug overlay anzeigen
+		m_pDebug->Render(m_pRenderer);
+	}
 
 	// geaenderte fenster oberflaeche an die graka schicken zur anzeige
-	SDL_UpdateWindowSurface(m_pWindow);
+	m_pRenderer->FinishFrame();
 }
 
 void System::update(Uint32 _dt)
 {
 	m_pScene->update(_dt);
+
+	if (WasKeyPressed(Key::F3))
+	{
+		m_debugEnabled = !m_debugEnabled;
+	}
 }
+
+#define HANDLE_KEYCODE(CODE, KEY, BOOL) case CODE: m_keyState[KEY] = BOOL;
+#define HANDLE_KEY(KEY, BOOL) HANDLE_KEYCODE(SDL_SCANCODE_##KEY, Key::##KEY, BOOL)
+
+#define HANDLE_KEYS(BOOL)								\
+HANDLE_KEY(W, BOOL)										\
+HANDLE_KEY(A, BOOL)										\
+HANDLE_KEY(S, BOOL)										\
+HANDLE_KEY(D, BOOL)										\
+HANDLE_KEYCODE(SDL_SCANCODE_ESCAPE, Key::ESC, BOOL)		\
+HANDLE_KEY(F3, BOOL)
 
 void System::input()
 {
@@ -185,42 +201,14 @@ void System::input()
 				// SWITCH_ON_KEY(e.key.keysym.scancode, true);
 				switch (e.key.keysym.scancode)
 				{
-					case SDL_SCANCODE_W:
-						m_keyState[Key::W] = true;
-						break;
-					case SDL_SCANCODE_A:
-						m_keyState[Key::A] = true;
-						break;
-					case SDL_SCANCODE_S:
-						m_keyState[Key::S] = true;
-						break;
-					case SDL_SCANCODE_D:
-						m_keyState[Key::D] = true;
-						break;
-					case SDL_SCANCODE_ESCAPE:
-						m_keyState[Key::ESC] = true;
-						break;
+					HANDLE_KEYS(true)
 				}
 				break;
 			case SDL_EventType::SDL_KEYUP:
 				// SWITCH_ON_KEY(e.key.keysym.scancode, false);
 				switch (e.key.keysym.scancode)
 				{
-				case SDL_SCANCODE_W:
-					m_keyState[Key::W] = false;
-					break;
-				case SDL_SCANCODE_A:
-					m_keyState[Key::A] = false;
-					break;
-				case SDL_SCANCODE_S:
-					m_keyState[Key::S] = false;
-					break;
-				case SDL_SCANCODE_D:
-					m_keyState[Key::D] = false;
-					break;
-				case SDL_SCANCODE_ESCAPE:
-					m_keyState[Key::ESC] = false;
-					break;
+					HANDLE_KEYS(false)
 				}
 				break;
 		}

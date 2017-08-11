@@ -1,7 +1,7 @@
 #include "Player.h"
 
 Player::Player(const char* _name,
-	SDL_Surface* _pSprite,
+	Texture* _pSprite,
 	SDL_Rect _bounds,
 	EntityFlags _flags)
 	: Entity(_name, _pSprite, _bounds, (EntityFlags)(_flags | EntityFlags::SHOULD_UPDATE))

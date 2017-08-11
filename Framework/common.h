@@ -16,6 +16,9 @@
 std::string getParentDirectory(std::string _path, int _depth = 1);
 std::string getAssetPath(const char* _path);
 
+void Log(const char* _string);
+void Log(std::string _string);
+
 int RandomI(int _min, int _max);
 float RandomF(float _min, float _max);
 
@@ -32,3 +35,5 @@ if(CHECK)											\
 	std::cout << SDL_GetError() << std::endl;		\
 	return;											\
 }
+
+#define SAFE_DELETE(VAR) if(VAR) { delete VAR; VAR = nullptr; }

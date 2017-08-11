@@ -4,13 +4,13 @@
 
 enum Key
 {
-	ESC = 0, W = 1, A = 2, S = 3, D = 4, COUNT = 5
+	ESC = 0, W = 1, A = 2, S = 3, D = 4, F3 = 5, COUNT = 6
 };
 
 class Scene;
 class DebugOverlay;
 struct SDL_Window;
-struct SDL_Surface;
+class Renderer;
 
 class System
 {
@@ -40,8 +40,9 @@ private:
 
 private:
 	DebugOverlay* m_pDebug;
+	bool m_debugEnabled;
 	SDL_Window* m_pWindow;
-	SDL_Surface* m_pWindowSurface;
+	Renderer* m_pRenderer;
 	Scene* m_pScene;
 
 	bool m_keyState[Key::COUNT];

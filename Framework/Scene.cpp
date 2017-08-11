@@ -11,13 +11,13 @@ Scene::~Scene()
 {
 }
 
-void Scene::render(SDL_Surface* _pSurface)
+void Scene::render(Renderer* _pRenderer)
 {
 	for (auto itr = m_entitiesToRender.begin();
 			itr != m_entitiesToRender.end();
 			++itr)
 	{
-		(*itr)->Render(_pSurface, m_offset);
+		(*itr)->Render(_pRenderer, m_offset);
 	}
 }
 
@@ -55,7 +55,7 @@ void Scene::CheckCollisions()
 	}
 }
 
-void Scene::load(Uint32 _rmask, Uint32 _gmask, Uint32 _bmask, Uint32 _amask)
+void Scene::load(Renderer* _pRenderer)
 {
 }
 
