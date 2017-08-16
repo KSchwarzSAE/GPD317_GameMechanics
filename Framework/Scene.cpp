@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "Entity.h"
+#include "UI.h"
 
 Scene::Scene(System* _pSystem)
 	: m_pSystem(_pSystem)
@@ -19,6 +20,9 @@ void Scene::render(Renderer* _pRenderer)
 	{
 		(*itr)->Render(_pRenderer, m_offset);
 	}
+
+	if(m_pUI != nullptr)
+		m_pUI->Render(_pRenderer);
 }
 
 void Scene::update(Uint32 _dt)

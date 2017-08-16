@@ -8,7 +8,7 @@ class Player : public Entity
 public:
 	Player(
 		const char* _name,
-		Texture* _pSprite,
+		IRenderable* _pRenderable,
 		SDL_Rect _bounds,
 		EntityFlags _flags = EntityFlags::NONE);
 	~Player();

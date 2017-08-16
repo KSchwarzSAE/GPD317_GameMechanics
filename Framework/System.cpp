@@ -5,6 +5,7 @@
 #include "DebugOverlay.h"
 #include "Renderer.h"
 #include "common.h"
+#include "UI.h"
 
 #include <iostream>
 
@@ -27,6 +28,8 @@ bool System::init()
 
 	// Fonts initialisieren, und wenn der Rueckgabewert kleiner 0 ist, ist ein Fehler aufgetreten
 	HANDLE_ERROR(TTF_Init() < 0);
+
+	HANDLE_ERROR(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 2048) < 0);
 
 	m_pWindow = SDL_CreateWindow(
 		"Hello SDL World!",		// Titel des Fensters
@@ -169,7 +172,7 @@ void System::update(Uint32 _dt)
 	}
 }
 
-#define HANDLE_KEYCODE(CODE, KEY, BOOL) case CODE: m_keyState[KEY] = BOOL;
+#define HANDLE_KEYCODE(CODE, KEY, BOOL) case CODE: m_keyState[KEY] = BOOL; break;
 #define HANDLE_KEY(KEY, BOOL) HANDLE_KEYCODE(SDL_SCANCODE_##KEY, Key::##KEY, BOOL)
 
 #define HANDLE_KEYS(BOOL)								\
@@ -178,7 +181,8 @@ HANDLE_KEY(A, BOOL)										\
 HANDLE_KEY(S, BOOL)										\
 HANDLE_KEY(D, BOOL)										\
 HANDLE_KEYCODE(SDL_SCANCODE_ESCAPE, Key::ESC, BOOL)		\
-HANDLE_KEY(F3, BOOL)
+HANDLE_KEY(F3, BOOL)									\
+HANDLE_KEY(RETURN, BOOL)
 
 void System::input()
 {
@@ -195,6 +199,26 @@ void System::input()
 			// bei einem quit event das flag zum beenden setzten
 			case SDL_EventType::SDL_QUIT:
 				m_shouldStop = true;
+				break;
+
+			case SDL_EventType::SDL_MOUSEBUTTONUP:
+			case SDL_EventType::SDL_MOUSEBUTTONDOWN:
+				if (m_pScene->m_pUI)
+				{
+					SDL_Point p;
+					p.x = e.button.x;
+					p.y = e.button.y;
+					m_pScene->m_pUI->OnMouseChanged(p, e.button.state == SDL_PRESSED);
+				}
+				break;
+			case SDL_EventType::SDL_MOUSEMOTION:
+				if (m_pScene->m_pUI)
+				{
+					SDL_Point p;
+					p.x = e.motion.x;
+					p.y = e.motion.y;
+					m_pScene->m_pUI->OnMouseChanged(p, e.motion.state == SDL_PRESSED);
+				}
 				break;
 
 			case SDL_EventType::SDL_KEYDOWN:

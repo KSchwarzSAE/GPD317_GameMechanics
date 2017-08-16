@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-class Texture;
+class IRenderable;
 
 class Renderer
 {
@@ -18,7 +18,7 @@ public:
 	void BeginFrame();
 	void FinishFrame();
 
-	void DrawTexture(Texture* _pTexture, SDL_Rect _dest);
+	void Draw(IRenderable* _pRenderable, SDL_Rect _dest);
 
 private:
 	SDL_Renderer* m_pRenderer;

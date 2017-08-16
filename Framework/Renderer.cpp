@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "IRenderable.h"
 #include "Texture.h"
 
 Renderer::Renderer(SDL_Window* _pWindow)
@@ -25,10 +26,15 @@ void Renderer::FinishFrame()
 	SDL_RenderPresent(m_pRenderer);
 }
 
-void Renderer::DrawTexture(Texture* _pTexture, SDL_Rect _dest)
+void Renderer::Draw(IRenderable* _pRenderable, SDL_Rect _dest)
 {
-	if (SDL_RenderCopy(m_pRenderer, _pTexture->m_pTexture, 0, &_dest) < 0)
+	SDL_Texture* pTex = _pRenderable->GetSourceTexture()->m_pTexture;
+	
+	int result
+		= SDL_RenderCopy(m_pRenderer, pTex, &_pRenderable->GetSourceBounds(), &_dest);
+
+	if (result < 0)
 	{
-		Log(std::string("DrawTexture (").append(_pTexture->m_id).append(") failed!"));
+		Log(std::string("Draw failed for IRenderable: ").append(_pRenderable->GetDebugInfo()));
 	}
 }

@@ -4,7 +4,7 @@
 
 enum Key
 {
-	ESC = 0, W = 1, A = 2, S = 3, D = 4, F3 = 5, COUNT = 6
+	ESC = 0, W = 1, A = 2, S = 3, D = 4, F3 = 5, RETURN = 6, COUNT = 7
 };
 
 class Scene;

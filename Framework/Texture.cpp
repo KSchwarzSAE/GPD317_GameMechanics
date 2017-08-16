@@ -46,3 +46,13 @@ Texture::~Texture()
 	if(m_pTexture)
 		SDL_DestroyTexture(m_pTexture);
 }
+
+SDL_Rect Texture::GetBounds() const
+{
+	SDL_Rect bounds;
+	bounds.x = bounds.y = 0;
+	bounds.w = GetWidth();
+	bounds.h = GetHeight();
+
+	return bounds;
+}

@@ -6,11 +6,14 @@
 class System;
 class Entity;
 class Renderer;
+class UI;
 
 typedef std::list<Entity*> EntityList;
 
 class Scene
 {
+
+	friend class System;
 
 public:
 	Scene(System* _pSystem);
@@ -31,6 +34,7 @@ protected:
 	EntityList m_entitiesToUpdate;
 	EntityList m_entitiesToCollide;
 
+	UI* m_pUI;
 	SDL_Point m_offset;
 	System* m_pSystem;
 
