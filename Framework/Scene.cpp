@@ -35,6 +35,7 @@ void Scene::update(Uint32 _dt)
 	}
 
 	CheckCollisions();
+    HandleEntitiyChanges();
 }
 
 void Scene::CheckCollisions()
@@ -75,18 +76,46 @@ void Scene::unload()
 
 void Scene::AddEntity(Entity* _pEntity)
 {
-	m_entitiesToRender.push_back(_pEntity);
+    EntityChange change;
+    change.Mode = 1;
+    change.pEntity = _pEntity;
 
-	if (_pEntity->HasFlag(EntityFlags::SHOULD_UPDATE))
-		m_entitiesToUpdate.push_back(_pEntity);
-
-	if (_pEntity->HasFlag(EntityFlags::CAN_COLLIDE))
-		m_entitiesToCollide.push_back(_pEntity);
+	m_entitiesToChange.push_back(change);
 }
 
-void Scene::RemoveEntity(Entity* _pEntity)
+void Scene::RemoveEntity(Entity* _pEntity, bool _delete)
 {
-	m_entitiesToRender.remove(_pEntity);
-	m_entitiesToUpdate.remove(_pEntity);
-	m_entitiesToCollide.remove(_pEntity);
+	EntityChange change;
+    change.Mode = _delete ? 3 : 2;
+    change.pEntity = _pEntity;
+
+    m_entitiesToChange.push_back(change);
+}
+
+void Scene::HandleEntitiyChanges()
+{
+    for(auto it = m_entitiesToChange.begin(); it != m_entitiesToChange.end(); ++it)
+    {
+        if((*it).Mode == 1)
+        {
+            m_entitiesToRender.push_back((*it).pEntity);
+
+            if ((*it).pEntity->HasFlag(EntityFlags::SHOULD_UPDATE))
+                m_entitiesToUpdate.push_back((*it).pEntity);
+
+            if ((*it).pEntity->HasFlag(EntityFlags::CAN_COLLIDE))
+                m_entitiesToCollide.push_back((*it).pEntity);
+        }
+        else
+        {
+            m_entitiesToRender.remove((*it).pEntity);
+            m_entitiesToUpdate.remove((*it).pEntity;
+            m_entitiesToCollide.remove((*it).pEntity);
+
+            if((*it).Mode == 3)
+                delete (*it).pEntity;
+        }
+    }
+
+    m_entitiesToChange = std::list<EntityChange>();
 }
