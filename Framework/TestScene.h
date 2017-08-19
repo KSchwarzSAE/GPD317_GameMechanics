@@ -2,9 +2,12 @@
 
 #include "Scene.h"
 
-class Player;
-class Font;
 class Texture;
+class Font;
+class Player;
+class Enemy;
+class Bedrock;
+class Stone;
 
 class TestScene : public Scene
 {
@@ -22,5 +25,15 @@ public:
 private:
 	Texture* m_pHello;
 	Font* m_pFont;
-	Player* m_pFirst;
+	Player* m_pEntityPlayer;
+	Enemy* m_pEntityEnemy;
+	Bedrock* m_pEntityBedrock;
+	Stone* m_pEntityStone;
+
+	int groundPlaced = 0;
+	int bedrocksPlaced = 0;
+	int stonesPlaced = 0;
+
+	bool playerExists = false;
+	bool enemyExists = false;
 };

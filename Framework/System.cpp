@@ -33,7 +33,7 @@ bool System::init()
 		SDL_WINDOWPOS_CENTERED,	// Fenster Horizontal Zentrieren
 		SDL_WINDOWPOS_CENTERED, // Fenster Vertikal Zentrieren
 		800,					// Breite
-		600,					// Hoehe
+		800,					// Hoehe
 		SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE		// Extra Flags
 		);
 
@@ -169,7 +169,7 @@ void System::update(Uint32 _dt)
 	}
 }
 
-#define HANDLE_KEYCODE(CODE, KEY, BOOL) case CODE: m_keyState[KEY] = BOOL;
+#define HANDLE_KEYCODE(CODE, KEY, BOOL) case CODE: m_keyState[KEY] = BOOL; break;
 #define HANDLE_KEY(KEY, BOOL) HANDLE_KEYCODE(SDL_SCANCODE_##KEY, Key::##KEY, BOOL)
 
 #define HANDLE_KEYS(BOOL)								\

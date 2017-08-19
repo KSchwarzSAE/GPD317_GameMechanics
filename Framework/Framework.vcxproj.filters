@@ -38,6 +38,15 @@
     <Filter Include="Object">
       <UniqueIdentifier>{75fc7907-bfd9-43a2-b748-e400fb898450}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Enemy">
+      <UniqueIdentifier>{8196ebd9-94e9-4634-a7c1-baf121c2f026}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bedrock">
+      <UniqueIdentifier>{e0f39263-8f90-4994-a9c0-8b20c3650bf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Stone">
+      <UniqueIdentifier>{955db231-6b78-4b13-a5a7-5dfdd407cac0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -74,6 +83,15 @@
     </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Bedrock.cpp">
+      <Filter>Bedrock</Filter>
+    </ClCompile>
+    <ClCompile Include="Stone.cpp">
+      <Filter>Stone</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,6 +131,15 @@
     </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Bedrock.h">
+      <Filter>Bedrock</Filter>
+    </ClInclude>
+    <ClInclude Include="Stone.h">
+      <Filter>Stone</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -55,6 +55,10 @@ void Scene::CheckCollisions()
 	}
 }
 
+void Scene::CollisionEvent(Entity * _entity)
+{
+}
+
 void Scene::load(Renderer* _pRenderer)
 {
 }

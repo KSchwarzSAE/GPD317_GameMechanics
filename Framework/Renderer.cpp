@@ -16,7 +16,7 @@ Renderer::~Renderer()
 
 void Renderer::BeginFrame()
 {
-	SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(m_pRenderer);
 }
 

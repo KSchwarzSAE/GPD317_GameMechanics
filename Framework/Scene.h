@@ -19,6 +19,7 @@ public:
 	virtual void render(Renderer* _pRenderer);
 	virtual void update(Uint32 _dt);
 	virtual void CheckCollisions();
+	virtual void CollisionEvent(Entity* _entity);
 
 	virtual void load(Renderer* _pRenderer);
 	virtual void unload();
