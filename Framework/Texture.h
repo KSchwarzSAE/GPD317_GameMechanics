@@ -18,7 +18,7 @@ public:
 	int GetWidth() const { return m_width; }
 	int GetHeight() const { return m_height; }
 
-private:
+protected:
 	const char* m_id;
 	int m_width;
 	int m_height;

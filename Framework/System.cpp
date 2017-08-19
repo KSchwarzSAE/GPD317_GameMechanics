@@ -169,7 +169,7 @@ void System::update(Uint32 _dt)
 	}
 }
 
-#define HANDLE_KEYCODE(CODE, KEY, BOOL) case CODE: m_keyState[KEY] = BOOL;
+#define HANDLE_KEYCODE(CODE, KEY, BOOL) case CODE: m_keyState[KEY] = BOOL; break;
 #define HANDLE_KEY(KEY, BOOL) HANDLE_KEYCODE(SDL_SCANCODE_##KEY, Key::##KEY, BOOL)
 
 #define HANDLE_KEYS(BOOL)								\
@@ -177,6 +177,7 @@ HANDLE_KEY(W, BOOL)										\
 HANDLE_KEY(A, BOOL)										\
 HANDLE_KEY(S, BOOL)										\
 HANDLE_KEY(D, BOOL)										\
+HANDLE_KEY(SPACE, BOOL)								    \
 HANDLE_KEYCODE(SDL_SCANCODE_ESCAPE, Key::ESC, BOOL)		\
 HANDLE_KEY(F3, BOOL)
 

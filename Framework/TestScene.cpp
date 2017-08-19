@@ -5,10 +5,20 @@
 #include "Font.h"
 #include "Texture.h"
 #include "Renderer.h"
+#include "Timer.h"
+#include "Enemy.h"
+#include "Level.h"
+#include "Projectile.h"
+#include <iostream>
+
+System s2;
+
 
 TestScene::TestScene(System* _pSystem)
 	: Scene(_pSystem)
 {
+	m_FireDelay = 200;
+	m_FireWaitingTime = 0;
 }
 
 TestScene::~TestScene()
@@ -18,6 +28,63 @@ TestScene::~TestScene()
 
 void TestScene::update(Uint32 _dt)
 {
+	if (WinTimer.TicksTicked() >= 30000)
+	{
+		std::cout << "Kaffe Kevin sleepy, you win, now leave this place fool!" << std::endl;
+		s2.clean();
+	}
+
+
+	m_FireWaitingTime += _dt;
+
+#pragma region EnemySpawns
+
+	if (SpawnKevin.TicksTicked() >= 100)
+	{
+		if (pKevin)
+		{
+			AddEntity(new Enemy("Kevin", pKevin, boundsKevin, EntityFlags::SHOULD_UPDATE));
+
+			SpawnKevin.Restart();
+		}
+
+	}
+	if (SpawnMattis.TicksTicked() >= 700)
+	{
+		if (pMattis)
+		{
+			AddEntity(new Enemy("Mattis", pMattis, boundsMattis, EntityFlags::SHOULD_UPDATE));
+
+			SpawnMattis.Restart();
+		}
+
+	}
+	if (SpawnPit.TicksTicked() >= 1000)
+	{
+		if (pPit)
+		{
+			AddEntity(new Enemy("Pit", pPit, boundsPit, EntityFlags::SHOULD_UPDATE));
+
+			SpawnPit.Restart();
+		}
+
+	}
+#pragma endregion
+
+#pragma region Backgroundmovement
+	m_pSpace1->GetBounds().y += _dt / 4;
+	m_pSpace2->GetBounds().y += _dt / 4;
+
+	if (m_pSpace1->GetBounds().y >= 600) {
+		m_pSpace1->GetBounds().y = m_pSpace2->GetBounds().y - 1024;
+	}
+
+	if (m_pSpace2->GetBounds().y >= 600) {
+		m_pSpace2->GetBounds().y = m_pSpace1->GetBounds().y - 1024;
+	}
+#pragma endregion
+
+#pragma region Controlls
 	if (m_pSystem->IsKeyPressed(Key::W))
 	{
 		m_pFirst->GetBounds().y -= _dt;
@@ -38,6 +105,30 @@ void TestScene::update(Uint32 _dt)
 		m_pFirst->GetBounds().x += _dt;
 	}
 
+	if (m_pSystem->IsKeyPressed(Key::SPACE))
+	{
+		if (m_FireWaitingTime >= m_FireDelay)
+		{
+			
+			boundsBeam.x = m_pFirst->GetBounds().x + 15;
+			boundsBeam.y = m_pFirst->GetBounds().y - 50;
+			boundsBeam.w = 80;
+			boundsBeam.h = 80;
+
+			AddEntity(m_pBeamObject = new Projectile("Beam", m_pBeam, boundsBeam));
+
+			m_pBeamObject->m_allowBounds.x = 0;
+			m_pBeamObject->m_allowBounds.y = 0;
+			m_pBeamObject->m_allowBounds.w = 800;
+			m_pBeamObject->m_allowBounds.h = 600;
+
+			m_FireWaitingTime = 0;
+		}
+
+
+	}
+
+#pragma endregion
 	Scene::update(_dt);
 }
 
@@ -45,41 +136,82 @@ void TestScene::render(Renderer* _pRenderer)
 {
 	Scene::render(_pRenderer);
 
-	SDL_Rect rect;
-	rect.x = 5;
-	rect.y = 15;
-	rect.w = m_pHello->GetWidth();
-	rect.h = m_pHello->GetHeight();
-	_pRenderer->DrawTexture(m_pHello, rect);
+	
 }
 
 void TestScene::load(Renderer* _pRenderer)
 {
-	Texture* pEgg = new Texture(_pRenderer, getAssetPath("Images/egg.png").c_str());
+	
+#pragma region EnemySection
+	//Enemy section
 
-	for (int i = 0; i < 100; ++i)
-	{
-		SDL_Rect boundsEgg;
-		boundsEgg.w = 172;
-		boundsEgg.h = 240;
-		boundsEgg.x = RandomI(0, 628);
-		boundsEgg.y = RandomI(0, 360);
+	boundsKevin.x = -50;
+	boundsKevin.y = 200;
+	boundsKevin.w = 200;
+	boundsKevin.h = 200;
 
-		AddEntity(new Entity("Egg", pEgg, boundsEgg));
-	}
+	
+	boundsMattis.x = 0;
+	boundsMattis.y = 100;
+	boundsMattis.w = 100;
+	boundsMattis.h = 100;
 
-	m_pFont = new Font(getAssetPath("Fonts/comic.ttf").c_str(), 12);
-	m_pHello = m_pFont->Create("Hello World", _pRenderer);
+	
+	boundsPit.x = 0;
+	boundsPit.y = 100;
+	boundsPit.w = 150;
+	boundsPit.h = 150;
 
-	Texture* pLink = new Texture(_pRenderer, getAssetPath("Images/link.png").c_str());
+	pKevin = new Texture(_pRenderer, getAssetPath("Images/kevin.jpg").c_str());
 
-	SDL_Rect boundsLink;
-	boundsLink.x = 0;
-	boundsLink.y = 0;
-	boundsLink.w = 80;
-	boundsLink.h = 80;
+	pMattis = new Texture(_pRenderer, getAssetPath("Images/mattis.jpg").c_str());
+	pPit = new Texture(_pRenderer, getAssetPath("Images/pit.jpg").c_str());
 
-	AddEntity(m_pFirst = new Player("Player", pLink, boundsLink));
+	//AddEntity(new Enemy("Kevin", pKevin, boundsKevin, EntityFlags::SHOULD_UPDATE));
+	//AddEntity(new Enemy("Mattis", pMattis, boundsMattis, EntityFlags::SHOULD_UPDATE));
+	//AddEntity(new Enemy("Pit", pPit, boundsMattis, EntityFlags::SHOULD_UPDATE));
+
+	SpawnPit.Start();
+	SpawnKevin.Start();
+	SpawnMattis.Start();
+
+	WinTimer.Start();
+#pragma endregion
+
+#pragma region LevelSection
+	pSpace = new Texture(_pRenderer, getAssetPath("Images/space.png").c_str());
+
+
+	
+	boundsBack1.w = 800;
+	boundsBack1.h = 1024;
+	boundsBack1.x = 0;
+	boundsBack1.y = -424;
+
+	
+	boundsBack2.w = 800;
+	boundsBack2.h = 1024;
+	boundsBack2.x = 0;
+	boundsBack2.y = -1448;
+
+	AddEntity(m_pSpace1 = new Level("BackG1", pSpace, boundsBack1));
+	AddEntity(m_pSpace2 = new Level("BackG1", pSpace, boundsBack2));
+#pragma endregion
+
+	m_pBeam = new Texture(_pRenderer, getAssetPath("Images/beam.png").c_str());
+	m_pPlayer = new Texture(_pRenderer, getAssetPath("Images/Player.png").c_str());
+
+
+
+	SDL_Rect boundsPlayer;
+	boundsPlayer.x = 350;
+	boundsPlayer.y = 600;
+	boundsPlayer.w = 80;
+	boundsPlayer.h = 80;
+
+
+
+	AddEntity(m_pFirst = new Player("Player", m_pPlayer, boundsPlayer));
 
 	m_pFirst->m_allowBounds.x = 0;
 	m_pFirst->m_allowBounds.y = 0;
@@ -89,6 +221,6 @@ void TestScene::load(Renderer* _pRenderer)
 
 void TestScene::unload()
 {
-	SAFE_DELETE(m_pHello);
-	SAFE_DELETE(m_pFont);
+	SAFE_DELETE(m_pSpace1);
+	SAFE_DELETE(m_pSpace2);
 }

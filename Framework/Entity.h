@@ -30,7 +30,8 @@ public:
 	SDL_Rect GetCollisionRect() { return m_bounds; }
 	SDL_Rect& GetBounds() { return m_bounds; }
 
-private:
+
+protected:
 	const char* m_name;
 	EntityFlags m_flags;
 	Texture* m_pSprite;
